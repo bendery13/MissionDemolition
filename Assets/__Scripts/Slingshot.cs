@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Slingshot : MonoBehaviour
 {
+    [SerializeField] private LineRenderer rubber;
+    [SerializeField] private Transform firstPoint;
+    [SerializeField] private Transform secondPoint;
     // fields set in the Unity Inspector Pane
     [Header("Inscribed")]
     public GameObject projectilePrefab;
@@ -15,6 +18,12 @@ public class Slingshot : MonoBehaviour
     public GameObject projectile;
     public bool aimingMode;
 
+
+    void Start()
+    {
+        rubber.positionCount = 3;
+        UpdateRubber(launchPos);
+    }
     void Awake()
     {
         Transform launchPointTrans = transform.Find("LaunchPoint");
@@ -43,6 +52,8 @@ public class Slingshot : MonoBehaviour
         projectile.transform.position = launchPos;
         // Set it to IsKinematic 
         projectile.GetComponent<Rigidbody>().isKinematic = true;
+
+        UpdateRubber(launchPos);
     }
 
     void Update()
@@ -67,6 +78,7 @@ public class Slingshot : MonoBehaviour
         // Move the projectile to this new position
         Vector3 projPos = launchPos + mouseDelta;
         projectile.transform.position = projPos;
+        UpdateRubber(projPos);
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -78,6 +90,15 @@ public class Slingshot : MonoBehaviour
             projRB.velocity = -mouseDelta * velocityMult;
             FollowCam.POI = projectile; // Set the _MainCamera POI
             projectile = null;
+            UpdateRubber(launchPos);
         }
+    }
+
+    void UpdateRubber(Vector3 centerPoint)
+    {
+        if (rubber == null) return;
+        rubber.SetPosition(0, firstPoint.position);
+        rubber.SetPosition(1, centerPoint);
+        rubber.SetPosition(2, secondPoint.position);
     }
 }
