@@ -12,6 +12,7 @@ public enum GameMode
 public class MissionDemolition : MonoBehaviour
 {
     static private MissionDemolition S;
+    static private int startLevel = 0;
 
     [Header("Inscribed")]
     public Text uitLevel;
@@ -31,9 +32,9 @@ public class MissionDemolition : MonoBehaviour
     {
         S = this;
 
-        level = 0;
-        shotsTaken = 0;
         levelMax = castles.Length;
+        level = Mathf.Clamp(startLevel, 0, levelMax - 1);
+        shotsTaken = 0;
         StartLevel();
     }
 
@@ -97,5 +98,10 @@ public class MissionDemolition : MonoBehaviour
     static public GameObject GET_CASTLE()
     {
         return S.castle;
+    }
+
+    static public void SET_START_LEVEL(int levelIndex)
+    {
+        startLevel = Mathf.Max(0, levelIndex);
     }
 }
