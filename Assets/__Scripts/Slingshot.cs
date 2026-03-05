@@ -12,12 +12,17 @@ public class Slingshot : MonoBehaviour
     public GameObject projectilePrefab;
     public float velocityMult = 10f;
     public GameObject projLinePrefab;
+    public AudioClip slingshotSound;
+    public float soundVolume = 1f;
+    public AudioClip slingshotFollowupSound;
+    public float followupVolume = 1f;    
 
     // fields set dynamically
     public GameObject launchPoint;
     public Vector3 launchPos;
     public GameObject projectile;
     public bool aimingMode;
+    [SerializeField] private AudioSource audioSource;
 
 
     void Start()
@@ -31,6 +36,7 @@ public class Slingshot : MonoBehaviour
         launchPoint = launchPointTrans.gameObject;
         launchPoint.SetActive(false);
         launchPos = launchPointTrans.position;
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
     void OnMouseEnter()
     {
@@ -90,6 +96,13 @@ public class Slingshot : MonoBehaviour
             projRB.collisionDetectionMode = CollisionDetectionMode.Continuous;
             projRB.velocity = -mouseDelta * velocityMult;
 
+            audioSource.volume = soundVolume;
+            audioSource.PlayOneShot(slingshotSound);
+            if (slingshotFollowupSound != null)
+            {
+                StartCoroutine(PlayFollowupSound());
+            }
+
             FollowCam.SWITCH_VIEW(FollowCam.eView.slingshot);
             FollowCam.POI = projectile; // Set the _MainCamera POI
             // Add a ProjectileLine to the Projectile
@@ -106,5 +119,16 @@ public class Slingshot : MonoBehaviour
         rubber.SetPosition(0, firstPoint.position);
         rubber.SetPosition(1, centerPoint);
         rubber.SetPosition(2, secondPoint.position);
+    }
+
+    IEnumerator PlayFollowupSound()
+    {
+        // wait for first clip to finish
+        if (slingshotSound != null)
+        {
+            yield return new WaitForSeconds(slingshotSound.length);
+        }
+        audioSource.volume = followupVolume;
+        audioSource.PlayOneShot(slingshotFollowupSound);
     }
 }
