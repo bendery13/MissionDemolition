@@ -425,6 +425,8 @@ MonoBehaviour:
   projLinePrefab: {fileID: 3529847496602596768, guid: bd2d94430fc3ed240be2168fe795e94c, type: 3}
   slingshotSound: {fileID: 8300000, guid: fbb7ed378abb83d4c93a93c79adafa78, type: 3}
   soundVolume: 1
+  slingshotFollowupSound: {fileID: 8300000, guid: dfac4d6fa70fd7a44b83f131e048508e, type: 3}
+  followupVolume: 1
   launchPoint: {fileID: 0}
   launchPos: {x: 0, y: 0, z: 0}
   projectile: {fileID: 0}
