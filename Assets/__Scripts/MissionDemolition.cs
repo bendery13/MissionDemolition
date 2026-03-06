@@ -72,6 +72,7 @@ public class MissionDemolition : MonoBehaviour
         if ((mode == GameMode.playing) && Goal.goalMet)
         {
             mode=GameMode.levelEnd;
+            MarkLevelCompleted(level);
 
             FollowCam.SWITCH_VIEW(FollowCam.eView.both);
 
@@ -104,4 +105,18 @@ public class MissionDemolition : MonoBehaviour
     {
         startLevel = Mathf.Max(0, levelIndex);
     }
+
+    public void ReloadCurrentLevel()
+    {
+        CancelInvoke("NextLevel");
+        mode = GameMode.playing;
+        StartLevel();
+    }
+
+    void MarkLevelCompleted(int levelIndex)
+    {
+        PlayerPrefs.SetInt("LevelCompleted_" + levelIndex, 1);
+        PlayerPrefs.Save();
+    }
+
 }
