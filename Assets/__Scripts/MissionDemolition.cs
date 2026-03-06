@@ -28,6 +28,9 @@ public class MissionDemolition : MonoBehaviour
     public GameMode mode = GameMode.idle;
     public string showing = "Show Slingshot";
 
+    // reference to the UI panel shown when the player beats the final level
+    public GameObject winScreen;
+
     void Start()
     {
         S = this;
@@ -40,6 +43,12 @@ public class MissionDemolition : MonoBehaviour
 
     void StartLevel()
     {
+        // hide win screen each time a level starts
+        if (winScreen != null)
+        {
+            winScreen.SetActive(false);
+        }
+
         if (castle != null)
         {
             Destroy(castle);
@@ -61,7 +70,8 @@ public class MissionDemolition : MonoBehaviour
 
     void UpdateGUI()
     {
-        uitLevel.text = "Level: "+(level+1)+" of "+levelMax;
+        int displayLevel = Mathf.Min(level + 1, levelMax);
+        uitLevel.text = "Level: "+ displayLevel +" of "+levelMax;
         uitShots.text = "Shots Taken: "+shotsTaken;
     }
 
@@ -83,10 +93,40 @@ public class MissionDemolition : MonoBehaviour
     void NextLevel()
     {
         level++;
-        if (level == levelMax)
+        if (level >= levelMax)
         {
-            level = 0;
-            shotsTaken = 0;
+            // finished all levels – show win UI instead of wrapping around
+            ShowWinScreen();
+            return;
+        }
+        StartLevel();
+    }
+
+    // display the end‑of‑game panel and pause gameplay
+    void ShowWinScreen()
+    {
+        if (winScreen != null)
+        {
+            winScreen.SetActive(true);
+        }
+        mode = GameMode.idle;
+    }
+
+    // hooked up to the two buttons on the win panel:
+    public void OnWinMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
+
+    public void OnWinRestart()
+    {
+        // restart from first level
+        level = 0;
+        shotsTaken = 0;
+        startLevel = 0;
+        if (winScreen != null)
+        {
+            winScreen.SetActive(false);
         }
         StartLevel();
     }
