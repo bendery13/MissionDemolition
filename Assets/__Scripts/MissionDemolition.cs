@@ -13,6 +13,7 @@ public class MissionDemolition : MonoBehaviour
 {
     static private MissionDemolition S;
     static private int startLevel = 0;
+    static private bool launchedFromLevelSelect = false;
 
     [Header("Inscribed")]
     public Text uitLevel;
@@ -86,8 +87,20 @@ public class MissionDemolition : MonoBehaviour
 
             FollowCam.SWITCH_VIEW(FollowCam.eView.both);
 
-            Invoke("NextLevel", 2f);
+            if (launchedFromLevelSelect)
+            {
+                Invoke("ReturnToLevelSelect", 2f);
+            }
+            else
+            {
+                Invoke("NextLevel", 2f);
+            }
         }
+    }
+
+    void ReturnToLevelSelect()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("LevelSelect");
     }
 
     void NextLevel()
@@ -144,11 +157,19 @@ public class MissionDemolition : MonoBehaviour
     static public void SET_START_LEVEL(int levelIndex)
     {
         startLevel = Mathf.Max(0, levelIndex);
+        launchedFromLevelSelect = true;
+    }
+
+    static public void START_FROM_MAIN_MENU()
+    {
+        startLevel = 0;
+        launchedFromLevelSelect = false;
     }
 
     public void ReloadCurrentLevel()
     {
         CancelInvoke("NextLevel");
+        CancelInvoke("ReturnToLevelSelect");
         mode = GameMode.playing;
         StartLevel();
     }

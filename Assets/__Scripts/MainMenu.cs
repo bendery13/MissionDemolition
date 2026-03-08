@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour
     }
     public void StartButton()
     {
+        MissionDemolition.START_FROM_MAIN_MENU();
         SceneManager.LoadScene("_Scene_0");
     }
     public void SelectLevelButton()
