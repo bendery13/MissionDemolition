@@ -6,7 +6,7 @@ Southern Illinois University Edwardsville
 
 
 ## Project Overview
-**Click to play through Unity Play:** [https://play.unity.com/en/games/937d16d3-3679-4be4-96a6-3ef80fe58078/mission-demolition](url)
+**Click to play through Unity Play:** [Mission Demolition](https://play.unity.com/en/games/937d16d3-3679-4be4-96a6-3ef80fe58078/mission-demolition)
 
 Mission Demolition is a physics-based projectile game where the player uses a slingshot to launch projectiles at castle targets.
 Each level challenges the player to land accurate shots, trigger the goal, and progress through the full set of castles.
